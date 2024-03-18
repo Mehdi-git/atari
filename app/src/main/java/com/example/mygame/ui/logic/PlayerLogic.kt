@@ -2,18 +2,18 @@ package com.example.mygame.ui.logic
 
 import com.example.mygame.ui.model.Player
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class PlayerLogic(private val timeManager: TimeManager) {
+class PlayerLogic(
+    private val timeManager: TimeManager,
+    private val coroutineScope: CoroutineScope
+) {
 
     private val _player = MutableStateFlow(Player(100f, 0f))
     val player: StateFlow<Player> = _player
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
 
     init {
         coroutineScope.launch {
@@ -33,7 +33,7 @@ class PlayerLogic(private val timeManager: TimeManager) {
 
 
     fun jump() {
-        _player.update { it.copy(speed = -1f) }
+        _player.update { it.copy(speed = -0.5f) }
     }
 
 }

@@ -9,12 +9,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class BlockLogic (private val timeManager : TimeManager) {
+class BlockLogic (
+    private val timeManager : TimeManager,
+    private val coroutineScope: CoroutineScope
+) {
 
     private val _blockPosition = MutableStateFlow(Block(Pipe(0f,200f, 0f), Pipe(350f, 450f, 0f)))
     val blockPosition: StateFlow<Block> = _blockPosition
-
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     init {
         updateBlockX{ _ -> 400f }

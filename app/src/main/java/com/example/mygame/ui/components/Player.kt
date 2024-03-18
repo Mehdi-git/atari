@@ -14,8 +14,8 @@ import com.example.mygame.ui.logic.PlayerLogic
 import com.example.mygame.ui.model.ToDpSize
 
 @Composable
-internal fun Player(playerLogic: PlayerLogic) {
-    Box(Modifier.clickable {
+internal fun Player(playerLogic: PlayerLogic, modifier: Modifier = Modifier) {
+    Box(modifier.clickable {
         playerLogic.jump()
     }) {
         val player = playerLogic.player.collectAsState()
