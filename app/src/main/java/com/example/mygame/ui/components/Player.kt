@@ -10,21 +10,21 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.dp
 import com.example.mygame.ui.logic.PlayerLogic
+import com.example.mygame.ui.model.ToDpSize
 
 @Composable
-  internal fun Player(playerLogic: PlayerLogic) {
+internal fun Player(playerLogic: PlayerLogic) {
     Box(Modifier.clickable {
         playerLogic.jump()
     }) {
-        val playerPosition = playerLogic.playerPosition.collectAsState()
+        val player = playerLogic.player.collectAsState()
         Box(
             Modifier
                 .offset {
-                    IntOffset(x = 0, y = playerPosition.value.y.toInt())
+                    IntOffset(x = 0, y = player.value.y.toInt())
                 }
-                .size(50.dp)
+                .size(player.value.size.ToDpSize())
                 .background(Color.Blue)
         )
     }
