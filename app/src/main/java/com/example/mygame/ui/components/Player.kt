@@ -10,22 +10,29 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
+import com.example.mygame.ui.logic.PlayerClashLogic
 import com.example.mygame.ui.logic.PlayerLogic
-import com.example.mygame.ui.model.ToDpSize
+import com.example.mygame.ui.model.toDpSize
 
 @Composable
-internal fun Player(playerLogic: PlayerLogic, modifier: Modifier = Modifier) {
+internal fun Player(
+    modifier: Modifier = Modifier,
+    playerLogic: PlayerLogic,
+    playerClashLogic: PlayerClashLogic
+) {
     Box(modifier.clickable {
         playerLogic.jump()
     }) {
         val player = playerLogic.player.collectAsState()
+        val clash = playerClashLogic.clashHappened.collectAsState().value
         Box(
             Modifier
                 .offset {
-                    IntOffset(x = 0, y = player.value.y.toInt())
+                    IntOffset(x = 0, y = player.value.y.dp.roundToPx())
                 }
-                .size(player.value.size.ToDpSize())
-                .background(Color.Blue)
+                .size(player.value.size.toDpSize())
+                .background(if (clash) Color.Red else Color.Blue)
         )
     }
 }

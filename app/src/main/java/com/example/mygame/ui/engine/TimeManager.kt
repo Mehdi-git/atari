@@ -1,4 +1,4 @@
-package com.example.mygame.ui.logic
+package com.example.mygame.ui.engine
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow

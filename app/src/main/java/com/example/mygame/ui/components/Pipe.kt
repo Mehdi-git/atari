@@ -15,11 +15,11 @@ import com.example.mygame.ui.model.Pipe
 @Composable
 internal fun Pipe(pipe: Pipe, modifier: Modifier = Modifier) {
     Box(
-         modifier
+        modifier
             .offset {
                 IntOffset(pipe.x.dp.roundToPx(), pipe.topY.dp.roundToPx())
             }
-            .size(20.dp, (pipe.bottomY - pipe.topY).dp)
-            .background(Color.Blue)
+            .size(pipe.width.dp, (pipe.bottomY - pipe.topY).dp)
+            .background(Color.Green)
     )
 }
