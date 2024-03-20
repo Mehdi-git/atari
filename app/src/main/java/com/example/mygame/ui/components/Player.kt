@@ -1,7 +1,6 @@
 package com.example.mygame.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -21,9 +20,7 @@ internal fun Player(
     playerLogic: PlayerLogic,
     playerClashLogic: PlayerClashLogic
 ) {
-    Box(modifier.clickable {
-        playerLogic.jump()
-    }) {
+    Box(modifier) {
         val player = playerLogic.player.collectAsState()
         val clash = playerClashLogic.clashHappened.collectAsState().value
         Box(
