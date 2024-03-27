@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class PlayerClashLogic (
     private val playerLogic: PlayerLogic,
     private val blockLogic: BlockLogic,
+    private val gameStatusLogic: GameStatusLogic
 ): GameLogic {
 
     private val _clashHappened = MutableStateFlow(false)
@@ -19,6 +20,9 @@ class PlayerClashLogic (
             val topPipeClash = clashed(player, block.topPipe)
             val bottomPipeClash = clashed(player, block.bottomPipe)
             val clashHappened = topPipeClash || bottomPipeClash
+            if(clashHappened){
+                gameStatusLogic.gameOver()
+            }
             _clashHappened.value = clashHappened
     }
     private fun clashed (

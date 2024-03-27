@@ -6,7 +6,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class GameStatusLogic : GameLogic {
+class GameStatusLogic (
+) : GameLogic {
 
     private val _gameState = MutableStateFlow(GameStatus.NotStarted)
     val gameState = _gameState.asStateFlow()

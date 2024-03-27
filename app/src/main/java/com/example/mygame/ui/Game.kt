@@ -3,6 +3,7 @@ package com.example.mygame.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,6 +21,7 @@ import com.example.mygame.ui.engine.TimeManager
 import com.example.mygame.ui.logic.GameScoreLogic
 import com.example.mygame.ui.logic.GameStatusLogic
 import com.example.mygame.ui.model.GameStatus
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun Game(modifier: Modifier = Modifier) {
@@ -39,15 +41,15 @@ fun Game(modifier: Modifier = Modifier) {
     val gameStatueLogic = remember {
         GameStatusLogic()
     }
-    val playerLogic = remember {
-        PlayerLogic(gameStatueLogic)
-    }
-
-    val playerClashLogic = remember {
-        PlayerClashLogic(playerLogic, blockLogic)
+        val playerLogic = remember {
+            PlayerLogic(gameStatueLogic)
     }
     val gameScoreLogic = remember {
         GameScoreLogic(playerLogic, blockLogic)
+    }
+
+    val playerClashLogic = remember {
+        PlayerClashLogic(playerLogic, blockLogic, gameStatueLogic)
     }
 
 
@@ -68,6 +70,7 @@ fun Game(modifier: Modifier = Modifier) {
         Player(playerLogic = playerLogic, playerClashLogic = playerClashLogic )
         Block(blockLogic)
         Text(text = gameScoreLogic.score.collectAsState().value.toString(), Modifier.align(Alignment.TopEnd))
+        Text(text = gameStatueLogic.gameState.collectAsState().value.toString(), Modifier.align((Alignment.TopStart)))
     }
 
 
