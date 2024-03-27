@@ -6,13 +6,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-class PlayerLogic: GameLogic {
+class PlayerLogic(private val gameStatus: GameStatusLogic): GameLogic {
 
     private val _player = MutableStateFlow(Player(100f, 0f))
     val player: StateFlow<Player> = _player
 
 
     fun jump() {
+        gameStatus.gameStarted()
         _player.update { it.copy(speed = -0.5f) }
     }
 

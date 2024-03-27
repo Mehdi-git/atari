@@ -3,7 +3,11 @@ package com.example.mygame.ui.model
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 
-data class Block(val topPipe: Pipe, val bottomPipe: Pipe) {
+data class Block(
+    val topPipe: Pipe,
+    val bottomPipe: Pipe,
+    val hasBeenScored: Boolean = false
+) {
     val scoreRect =  Rect(topLeft = topPipe.rect.bottomLeft, bottomRight = bottomPipe.rect.topRight)
 }
 

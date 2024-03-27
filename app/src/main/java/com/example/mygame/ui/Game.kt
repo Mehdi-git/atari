@@ -18,6 +18,8 @@ import com.example.mygame.ui.logic.PlayerClashLogic
 import com.example.mygame.ui.logic.PlayerLogic
 import com.example.mygame.ui.engine.TimeManager
 import com.example.mygame.ui.logic.GameScoreLogic
+import com.example.mygame.ui.logic.GameStatusLogic
+import com.example.mygame.ui.model.GameStatus
 
 @Composable
 fun Game(modifier: Modifier = Modifier) {
@@ -31,11 +33,14 @@ fun Game(modifier: Modifier = Modifier) {
     val timeManager = remember {
         TimeManager()
     }
-    val playerLogic = remember {
-        PlayerLogic()
-    }
     val blockLogic = remember {
         BlockLogic()
+    }
+    val gameStatueLogic = remember {
+        GameStatusLogic()
+    }
+    val playerLogic = remember {
+        PlayerLogic(gameStatueLogic)
     }
 
     val playerClashLogic = remember {
@@ -45,9 +50,16 @@ fun Game(modifier: Modifier = Modifier) {
         GameScoreLogic(playerLogic, blockLogic)
     }
 
+
     val logicManager = remember {
-        val logics = listOf(playerLogic, blockLogic, playerClashLogic, gameScoreLogic)
-        LogicManager(logics, timeManager, coroutineScope,gameScoreLogic )
+        val logics = listOf(
+            playerLogic,
+            blockLogic,
+            playerClashLogic,
+            gameScoreLogic,
+            gameStatueLogic
+        )
+        LogicManager(logics, timeManager, coroutineScope,gameStatueLogic)
     }
     Box(modifier.clickable {
         playerLogic.jump()

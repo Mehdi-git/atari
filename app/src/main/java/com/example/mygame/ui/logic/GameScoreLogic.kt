@@ -10,14 +10,17 @@ class GameScoreLogic(
     private val blockLogic: BlockLogic
 ): GameLogic {
 
-    private val _score = MutableStateFlow(2)
+    private val _score = MutableStateFlow(0)
     val score = _score.asStateFlow()
 
     override fun onUpdate(deltaTime: Float) {
+        val block = blockLogic.blockPosition.value
+        if (block.hasBeenScored) return
         val scoreRect = blockLogic.blockPosition.value.scoreRect
         val playerRect = playerLogic.player.value.rect
         val hasScore = playerRect.overlaps(scoreRect)
         if(hasScore) {
+            blockLogic.scoreBlock(block)
             _score.update { it + 1 }
         }
 

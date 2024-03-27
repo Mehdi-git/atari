@@ -39,6 +39,14 @@ class BlockLogic: GameLogic {
             )
         }
     }
+
+    fun scoreBlock(block: Block) {
+        _blockPosition.update {
+            it.copy(hasBeenScored = true)
+        }
+
+
+    }
 }
 
 
