@@ -6,9 +6,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-class PlayerLogic(private val gameStatus: GameStatusLogic): GameLogic {
+class PlayerLogic(private val gameStatus: GameStatusLogic): GameLogic, OnGameOverLogic {
 
-    private val _player = MutableStateFlow(Player(100f, 0f))
+    private val defaultPlayer = Player(100f, 0f)
+    private val _player = MutableStateFlow(defaultPlayer)
     val player: StateFlow<Player> = _player
 
 
@@ -27,6 +28,10 @@ class PlayerLogic(private val gameStatus: GameStatusLogic): GameLogic {
             }
             player.copy(y = newY.toFloat(), speed = newSpeed)
         }
+    }
+
+    override fun onGameOver() {
+        _player.update { defaultPlayer }
     }
 
 }

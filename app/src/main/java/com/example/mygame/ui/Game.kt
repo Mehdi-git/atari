@@ -3,7 +3,8 @@ package com.example.mygame.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.absoluteOffset
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,15 +19,26 @@ import com.example.mygame.ui.logic.BlockLogic
 import com.example.mygame.ui.logic.PlayerClashLogic
 import com.example.mygame.ui.logic.PlayerLogic
 import com.example.mygame.ui.engine.TimeManager
+import com.example.mygame.ui.engine.toPx
+import com.example.mygame.ui.logic.GameOverManager
 import com.example.mygame.ui.logic.GameScoreLogic
 import com.example.mygame.ui.logic.GameStatusLogic
-import com.example.mygame.ui.model.GameStatus
-import kotlinx.coroutines.flow.collectLatest
+import com.example.mygame.ui.logic.OnGameOverLogic
+import com.example.mygame.ui.model.Viewport
+
 
 @Composable
 fun Game(modifier: Modifier = Modifier) {
 
 
+    BoxWithConstraints {
+
+    val maxWidthPx = maxWidth.toPx()
+    val maxHeight = maxHeight.toPx()
+
+    val viewport = remember{
+        Viewport(maxWidthPx, maxHeight)
+    }
 
     val coroutineScope = remember {
         gameCoroutineScope()
@@ -36,12 +48,12 @@ fun Game(modifier: Modifier = Modifier) {
         TimeManager()
     }
     val blockLogic = remember {
-        BlockLogic()
+        BlockLogic(viewport)
     }
     val gameStatueLogic = remember {
         GameStatusLogic()
     }
-        val playerLogic = remember {
+    val playerLogic = remember {
             PlayerLogic(gameStatueLogic)
     }
     val gameScoreLogic = remember {
@@ -50,6 +62,10 @@ fun Game(modifier: Modifier = Modifier) {
 
     val playerClashLogic = remember {
         PlayerClashLogic(playerLogic, blockLogic, gameStatueLogic)
+    }
+    val gameOverManager = remember{
+        val onGameOverLogic : List<OnGameOverLogic> = listOf(playerLogic, blockLogic, gameScoreLogic)
+        GameOverManager(onGameOverLogic,gameStatueLogic,coroutineScope)
     }
 
 
@@ -63,18 +79,26 @@ fun Game(modifier: Modifier = Modifier) {
         )
         LogicManager(logics, timeManager, coroutineScope,gameStatueLogic)
     }
-    Box(modifier.clickable {
-        playerLogic.jump()
+        Box(
+            modifier
+                .fillMaxSize()
+                .clickable {
+                    playerLogic.jump()
+                }) {
+            Player(playerLogic = playerLogic, playerClashLogic = playerClashLogic)
+            Block(blockLogic)
+            Text(
+                text = gameScoreLogic.score.collectAsState().value.toString(),
+                Modifier.align(Alignment.TopEnd)
+            )
+            Text(
+                text = gameStatueLogic.gameState.collectAsState().value.toString(),
+                Modifier.align((Alignment.TopStart))
+            )
+        }
 
-    }){
-        Player(playerLogic = playerLogic, playerClashLogic = playerClashLogic )
-        Block(blockLogic)
-        Text(text = gameScoreLogic.score.collectAsState().value.toString(), Modifier.align(Alignment.TopEnd))
-        Text(text = gameStatueLogic.gameState.collectAsState().value.toString(), Modifier.align((Alignment.TopStart)))
+
     }
-
-
-
 
 }
 

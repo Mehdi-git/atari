@@ -6,7 +6,7 @@ import androidx.compose.ui.geometry.Rect
 data class Player(
     val y: Float,
     val speed: Float,
-    val size: Size = Size(90f, 30f)
+    val size: Size = Size(50f, 30f)
 ) {
 
     val rect = Rect(Offset(0f,y), size.toComposeSize())

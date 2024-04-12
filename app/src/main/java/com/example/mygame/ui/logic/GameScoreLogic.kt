@@ -7,10 +7,11 @@ import kotlinx.coroutines.flow.update
 
 class GameScoreLogic(
     private val playerLogic: PlayerLogic,
-    private val blockLogic: BlockLogic
-): GameLogic {
+    private val blockLogic: BlockLogic,
+): GameLogic, OnGameOverLogic {
 
-    private val _score = MutableStateFlow(0)
+    private val defaultScore = 0
+    private val _score = MutableStateFlow(defaultScore)
     val score = _score.asStateFlow()
 
     override fun onUpdate(deltaTime: Float) {
@@ -24,5 +25,9 @@ class GameScoreLogic(
             _score.update { it + 1 }
         }
 
+    }
+
+    override fun onGameOver() {
+        _score.update { defaultScore }
     }
 }

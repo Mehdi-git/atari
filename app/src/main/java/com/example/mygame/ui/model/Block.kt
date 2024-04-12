@@ -11,7 +11,6 @@ data class Block(
     val scoreRect =  Rect(topLeft = topPipe.rect.bottomLeft, bottomRight = bottomPipe.rect.topRight)
 }
 
-
 data class Pipe(
     val topY: Float,
     val bottomY: Float,

@@ -1,23 +1,29 @@
 package com.example.mygame.ui.logic
 
+import androidx.compose.ui.unit.dp
 import com.example.mygame.ui.engine.GameLogic
 import com.example.mygame.ui.model.Block
 import com.example.mygame.ui.model.Pipe
+import com.example.mygame.ui.model.Viewport
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-class BlockLogic: GameLogic {
+class BlockLogic(
+    private val viewport: Viewport
+) : GameLogic, OnGameOverLogic {
 
-    private val _blockPosition = MutableStateFlow(Block(Pipe(0f,200f, 0f), Pipe(300f, 450f, 0f)))
+    private val defaultBlock = Block(
+        Pipe(0f, 200f, 0f),
+        Pipe(300f, viewport.height, 0f))
+
+    private val _blockPosition = MutableStateFlow(defaultBlock)
     val blockPosition: StateFlow<Block> = _blockPosition
 
     init {
-        updateBlockX{ _ -> 400f }
-
+        resetBlock()
     }
-
-     override fun onUpdate(deltaTime: Float) {
+    override fun onUpdate(deltaTime: Float) {
         updateBlockX { x ->
             var newX = x - (deltaTime * 0.1f)
             if (newX < -100f) {
@@ -47,6 +53,13 @@ class BlockLogic: GameLogic {
 
 
     }
+    private fun resetBlock() {
+        _blockPosition.update { defaultBlock }
+        updateBlockX{ _ -> 400f }
+    }
+
+    override fun onGameOver() {
+        resetBlock()    }
 }
 
 
