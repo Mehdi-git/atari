@@ -1,5 +1,6 @@
 package com.example.mygame.ui.logic
 
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.mygame.ui.engine.GameLogic
 import com.example.mygame.ui.model.Block
@@ -12,54 +13,53 @@ import kotlinx.coroutines.flow.update
 class BlockLogic(
     private val viewport: Viewport
 ) : GameLogic, OnGameOverLogic {
-
-    private val defaultBlock = Block(
-        Pipe(0f, 200f, 0f),
-        Pipe(300f, viewport.height, 0f))
-
-    private val _blockPosition = MutableStateFlow(defaultBlock)
-    val blockPosition: StateFlow<Block> = _blockPosition
+    private val blockCreator = BlockCreator(viewport)
+    private val _blockPosition = MutableStateFlow(listOf( blockCreator.createBlock()))
+    val blockPosition: StateFlow<List<Block>> = _blockPosition
 
     init {
         resetBlock()
     }
     override fun onUpdate(deltaTime: Float) {
         updateBlockX { x ->
-            var newX = x - (deltaTime * 0.1f)
-            if (newX < -100f) {
-                newX = 400f
-            }
-            newX
+            x -(scrollAmount * deltaTime).dp
         }
     }
 
-    private fun updateBlockX(update: (Float) -> Float) {
-        _blockPosition.update { block ->
-            block.copy(
-                topPipe = block.topPipe.copy(
-                    x = update(block.topPipe.x)
-                ),
-                bottomPipe = block.bottomPipe.copy(
-                    x = update(block.bottomPipe.x)
+    private fun updateBlockX(update: (Dp) -> Dp) {
+        _blockPosition.update { blocks ->
+            blocks.map { block ->
+                block.copy(
+                    topPipe = block.topPipe.copy(
+                        x = update(block.topPipe.x)
+                    ),
+                    bottomPipe = block.bottomPipe.copy(
+                        x = update(block.bottomPipe.x)
+                    )
                 )
-            )
+            }
         }
     }
 
     fun scoreBlock(block: Block) {
         _blockPosition.update {
-            it.copy(hasBeenScored = true)
+           it.map { it.copy(hasBeenScored = true) }
         }
 
 
     }
     private fun resetBlock() {
-        _blockPosition.update { defaultBlock }
-        updateBlockX{ _ -> 400f }
+        _blockPosition.update { listOf(blockCreator.createBlock()) }
+        updateBlockX{ _ -> viewport.width }
     }
 
     override fun onGameOver() {
-        resetBlock()    }
+        resetBlock()
+    }
+
+    companion object {
+        const val scrollAmount = 0.2f
+    }
 }
 
 

@@ -10,7 +10,8 @@ import com.example.mygame.ui.logic.BlockLogic
 @Composable
 internal fun Block(blockLogic: BlockLogic, modifier: Modifier= Modifier) {
     Box(modifier) {
-        val blockPosition = blockLogic.blockPosition.collectAsState().value
+        val blockPositions = blockLogic.blockPosition.collectAsState().value
+        val blockPosition = blockPositions.first()
         Pipe(blockPosition.topPipe)
         Pipe(blockPosition.bottomPipe)
     }

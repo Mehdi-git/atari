@@ -15,9 +15,11 @@ class GameScoreLogic(
     val score = _score.asStateFlow()
 
     override fun onUpdate(deltaTime: Float) {
-        val block = blockLogic.blockPosition.value
+        val blocks = blockLogic.blockPosition.value
+        val block = blocks.first()
         if (block.hasBeenScored) return
-        val scoreRect = blockLogic.blockPosition.value.scoreRect
+
+        val scoreRect = blockLogic.blockPosition.value.first().scoreRect
         val playerRect = playerLogic.player.value.rect
         val hasScore = playerRect.overlaps(scoreRect)
         if(hasScore) {
