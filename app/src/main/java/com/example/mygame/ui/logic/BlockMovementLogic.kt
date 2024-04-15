@@ -4,26 +4,30 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.mygame.ui.engine.GameLogic
 import com.example.mygame.ui.model.Block
-import com.example.mygame.ui.model.Pipe
 import com.example.mygame.ui.model.Viewport
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
-class BlockLogic(
+class BlockMovementLogic(
     private val viewport: Viewport
 ) : GameLogic, OnGameOverLogic {
-    private val blockCreator = BlockCreator(viewport)
-    private val _blockPosition = MutableStateFlow(listOf( blockCreator.createBlock()))
+    private val _blockPosition = MutableStateFlow<List<Block>>(listOf())
     val blockPosition: StateFlow<List<Block>> = _blockPosition
 
     init {
         resetBlock()
     }
     override fun onUpdate(deltaTime: Float) {
+
         updateBlockX { x ->
-            x -(scrollAmount * deltaTime).dp
+            var newX = x - (deltaTime * 0.2f).dp
+            if (newX < (-100f).dp) {
+                newX = viewport.width
+            }
+            newX
         }
+
     }
 
     private fun updateBlockX(update: (Dp) -> Dp) {
@@ -42,19 +46,28 @@ class BlockLogic(
     }
 
     fun scoreBlock(block: Block) {
-        _blockPosition.update {
-           it.map { it.copy(hasBeenScored = true) }
+        _blockPosition.update { blocks ->
+            blocks.map {
+               if (it !== block) return@map it
+               it.copy(hasBeenScored = true)
+           }
         }
 
 
     }
     private fun resetBlock() {
-        _blockPosition.update { listOf(blockCreator.createBlock()) }
+        _blockPosition.update { listOf() }
         updateBlockX{ _ -> viewport.width }
     }
 
     override fun onGameOver() {
         resetBlock()
+    }
+
+    fun addBlock(createBlock: Block) {
+        _blockPosition.update {
+            it.plus(createBlock)
+        }
     }
 
     companion object {

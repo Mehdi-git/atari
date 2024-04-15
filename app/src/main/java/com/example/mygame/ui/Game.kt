@@ -18,8 +18,8 @@ import com.example.mygame.ui.components.Player
 import com.example.mygame.ui.engine.LogicManager
 import com.example.mygame.ui.engine.TimeManager
 import com.example.mygame.ui.engine.gameCoroutineScope
-import com.example.mygame.ui.engine.toPx
-import com.example.mygame.ui.logic.BlockLogic
+import com.example.mygame.ui.logic.BlockCreatorLogic
+import com.example.mygame.ui.logic.BlockMovementLogic
 import com.example.mygame.ui.logic.GameOverManager
 import com.example.mygame.ui.logic.GameScoreLogic
 import com.example.mygame.ui.logic.GameStatusLogic
@@ -46,9 +46,14 @@ fun Game(modifier: Modifier = Modifier) {
     val timeManager = remember {
         TimeManager()
     }
-    val blockLogic = remember {
-        BlockLogic(viewport)
+    val blockMovementLogic = remember {
+        BlockMovementLogic(viewport)
     }
+
+    val blockCreatorLogic = remember {
+        BlockCreatorLogic(blockMovementLogic, coroutineScope, viewport)
+    }
+
     val gameStatueLogic = remember {
         GameStatusLogic()
     }
@@ -56,14 +61,14 @@ fun Game(modifier: Modifier = Modifier) {
             PlayerLogic(gameStatueLogic)
     }
     val gameScoreLogic = remember {
-        GameScoreLogic(playerLogic, blockLogic)
+        GameScoreLogic(playerLogic, blockMovementLogic)
     }
 
     val playerClashLogic = remember {
-        PlayerClashLogic(playerLogic, blockLogic, gameStatueLogic)
+        PlayerClashLogic(playerLogic, blockMovementLogic, gameStatueLogic)
     }
     val gameOverManager = remember{
-        val onGameOverLogic : List<OnGameOverLogic> = listOf(playerLogic, blockLogic, gameScoreLogic)
+        val onGameOverLogic : List<OnGameOverLogic> = listOf(playerLogic, blockMovementLogic, gameScoreLogic)
         GameOverManager(onGameOverLogic,gameStatueLogic,coroutineScope)
     }
 
@@ -71,7 +76,7 @@ fun Game(modifier: Modifier = Modifier) {
     val logicManager = remember {
         val logics = listOf(
             playerLogic,
-            blockLogic,
+            blockMovementLogic,
             playerClashLogic,
             gameScoreLogic,
             gameStatueLogic
@@ -87,7 +92,7 @@ fun Game(modifier: Modifier = Modifier) {
 
             Background(timeManager)
             Player(playerLogic = playerLogic, playerClashLogic = playerClashLogic)
-            Block(blockLogic)
+            Block(blockMovementLogic)
             Text(
                 text = gameScoreLogic.score.collectAsState().value.toString(),
                 Modifier.align(Alignment.TopEnd)

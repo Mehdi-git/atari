@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.update
 
 class GameScoreLogic(
     private val playerLogic: PlayerLogic,
-    private val blockLogic: BlockLogic,
+    private val blockMovementLogic: BlockMovementLogic,
 ): GameLogic, OnGameOverLogic {
 
     private val defaultScore = 0
@@ -15,15 +15,15 @@ class GameScoreLogic(
     val score = _score.asStateFlow()
 
     override fun onUpdate(deltaTime: Float) {
-        val blocks = blockLogic.blockPosition.value
-        val block = blocks.first()
+        val blocks = blockMovementLogic.blockPosition.value
+        val block = blocks.firstOrNull() ?: return
         if (block.hasBeenScored) return
 
-        val scoreRect = blockLogic.blockPosition.value.first().scoreRect
+        val scoreRect = blockMovementLogic.blockPosition.value.first().scoreRect
         val playerRect = playerLogic.player.value.rect
         val hasScore = playerRect.overlaps(scoreRect)
         if(hasScore) {
-            blockLogic.scoreBlock(block)
+            blockMovementLogic.scoreBlock(block)
             _score.update { it + 1 }
         }
 

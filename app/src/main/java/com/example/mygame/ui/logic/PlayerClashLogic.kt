@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class PlayerClashLogic (
     private val playerLogic: PlayerLogic,
-    private val blockLogic: BlockLogic,
+    private val blockMovementLogic: BlockMovementLogic,
     private val gameStatusLogic: GameStatusLogic
 ): GameLogic {
 
@@ -16,8 +16,8 @@ class PlayerClashLogic (
     val clashHappened = _clashHappened.asStateFlow()
     override fun onUpdate(deltaTime: Float) {
             val player = playerLogic.player.value
-            val blocks = blockLogic.blockPosition.value
-            val block = blocks.first()
+            val blocks = blockMovementLogic.blockPosition.value
+            val block = blocks.firstOrNull() ?: return
 
             val topPipeClash = clashed(player, block.topPipe)
             val bottomPipeClash = clashed(player, block.bottomPipe)
