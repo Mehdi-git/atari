@@ -1,6 +1,7 @@
 package com.example.mygame.ui
 
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -11,19 +12,20 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.mygame.ui.components.Background
 import com.example.mygame.ui.components.Block
 import com.example.mygame.ui.components.Player
 import com.example.mygame.ui.engine.LogicManager
-import com.example.mygame.ui.engine.gameCoroutineScope
-import com.example.mygame.ui.logic.BlockLogic
-import com.example.mygame.ui.logic.PlayerClashLogic
-import com.example.mygame.ui.logic.PlayerLogic
 import com.example.mygame.ui.engine.TimeManager
+import com.example.mygame.ui.engine.gameCoroutineScope
 import com.example.mygame.ui.engine.toPx
+import com.example.mygame.ui.logic.BlockLogic
 import com.example.mygame.ui.logic.GameOverManager
 import com.example.mygame.ui.logic.GameScoreLogic
 import com.example.mygame.ui.logic.GameStatusLogic
 import com.example.mygame.ui.logic.OnGameOverLogic
+import com.example.mygame.ui.logic.PlayerClashLogic
+import com.example.mygame.ui.logic.PlayerLogic
 import com.example.mygame.ui.model.Viewport
 
 
@@ -34,10 +36,10 @@ fun Game(modifier: Modifier = Modifier) {
     BoxWithConstraints {
 
     val maxWidthPx = maxWidth.toPx()
-    val maxHeight = maxHeight.toPx()
+    val maxHeightPx = maxHeight.toPx()
 
     val viewport = remember{
-        Viewport(maxWidthPx, maxHeight)
+        Viewport(maxWidthPx, maxHeightPx)
     }
 
     val coroutineScope = remember {
@@ -85,6 +87,8 @@ fun Game(modifier: Modifier = Modifier) {
                 .clickable {
                     playerLogic.jump()
                 }) {
+
+            Background(timeManager)
             Player(playerLogic = playerLogic, playerClashLogic = playerClashLogic)
             Block(blockLogic)
             Text(
@@ -96,10 +100,17 @@ fun Game(modifier: Modifier = Modifier) {
                 Modifier.align((Alignment.TopStart))
             )
         }
-
-
     }
 
+}
+
+
+ fun Bitmap.resizeTo(maxHeight: Int): Bitmap {
+    val sourceWidth = width
+    val sourceHeight = height
+    val sourceRatio = sourceWidth.toFloat() / sourceHeight.toFloat()
+    val targetWidth = (maxHeight.toFloat() * sourceRatio).toInt()
+    return Bitmap.createScaledBitmap(this, targetWidth, maxHeight, true)
 }
 
 
