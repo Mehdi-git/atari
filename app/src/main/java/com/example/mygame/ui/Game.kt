@@ -35,11 +35,8 @@ fun Game(modifier: Modifier = Modifier) {
 
     BoxWithConstraints {
 
-    val maxWidthPx = maxWidth.toPx()
-    val maxHeightPx = maxHeight.toPx()
-
     val viewport = remember{
-        Viewport(maxWidthPx, maxHeightPx)
+        Viewport(maxWidth, maxHeight)
     }
 
     val coroutineScope = remember {
