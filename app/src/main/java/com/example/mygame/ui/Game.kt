@@ -12,6 +12,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.mygame.ui.components.Background
 import com.example.mygame.ui.components.Block
 import com.example.mygame.ui.components.Player
@@ -95,11 +98,18 @@ fun Game(modifier: Modifier = Modifier) {
             Block(blockMovementLogic)
             Text(
                 text = gameScoreLogic.score.collectAsState().value.toString(),
-                Modifier.align(Alignment.TopEnd)
+                Modifier
+                    .align(Alignment.TopEnd),
+                     color = Color.White,
+                        fontSize = 30.sp
+
+
             )
             Text(
                 text = gameStatueLogic.gameState.collectAsState().value.toString(),
-                Modifier.align((Alignment.TopStart))
+                Modifier.align((Alignment.TopStart)),
+                color = Color.White,
+                fontSize = 30.sp
             )
         }
     }

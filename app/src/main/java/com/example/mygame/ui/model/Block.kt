@@ -4,12 +4,14 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import java.util.UUID
 
 data class Block(
     val topPipe: Pipe,
     val bottomPipe: Pipe,
     val hasBeenScored: Boolean = false
 ) {
+    val id = UUID.randomUUID()
     val scoreRect =  Rect(topLeft = topPipe.rect.bottomLeft, bottomRight = bottomPipe.rect.topRight)
 }
 

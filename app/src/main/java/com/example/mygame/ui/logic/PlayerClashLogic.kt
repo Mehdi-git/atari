@@ -17,15 +17,15 @@ class PlayerClashLogic (
     override fun onUpdate(deltaTime: Float) {
             val player = playerLogic.player.value
             val blocks = blockMovementLogic.blockPosition.value
-            val block = blocks.firstOrNull() ?: return
-
-            val topPipeClash = clashed(player, block.topPipe)
-            val bottomPipeClash = clashed(player, block.bottomPipe)
-            val clashHappened = topPipeClash || bottomPipeClash
-            if(clashHappened){
-                gameStatusLogic.gameOver()
+            blocks.forEach { block ->
+                val topPipeClash = clashed(player, block.topPipe)
+                val bottomPipeClash = clashed(player, block.bottomPipe)
+                val clashHappened = topPipeClash || bottomPipeClash
+                if (clashHappened) {
+                    gameStatusLogic.gameOver()
+                }
+                _clashHappened.value = clashHappened
             }
-            _clashHappened.value = clashHappened
     }
     private fun clashed (
         player: Player,

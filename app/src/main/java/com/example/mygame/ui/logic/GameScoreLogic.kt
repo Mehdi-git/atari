@@ -16,17 +16,16 @@ class GameScoreLogic(
 
     override fun onUpdate(deltaTime: Float) {
         val blocks = blockMovementLogic.blockPosition.value
-        val block = blocks.firstOrNull() ?: return
-        if (block.hasBeenScored) return
-
-        val scoreRect = blockMovementLogic.blockPosition.value.first().scoreRect
-        val playerRect = playerLogic.player.value.rect
-        val hasScore = playerRect.overlaps(scoreRect)
-        if(hasScore) {
-            blockMovementLogic.scoreBlock(block)
-            _score.update { it + 1 }
+        blocks.forEach { block ->
+            if (block.hasBeenScored) return@forEach
+            val scoreRect = block.scoreRect
+            val playerRect = playerLogic.player.value.rect
+            val hasScore = playerRect.overlaps(scoreRect)
+            if (hasScore) {
+                blockMovementLogic.scoreBlock(block)
+                _score.update { it + 1 }
+            }
         }
-
     }
 
     override fun onGameOver() {

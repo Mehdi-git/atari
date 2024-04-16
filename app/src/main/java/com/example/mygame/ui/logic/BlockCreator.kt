@@ -9,8 +9,8 @@ import java.util.Random
 class BlockCreator(private val viewport: Viewport){
 
     private val minimumHeightPercentage = 0.1f
-    private val minimumGateHeightPercentage = 0.3f
-    private val maximumGateHeightPercentage = 0.5f
+    private val minimumGateHeightPercentage = 0.40f
+    private val maximumGateHeightPercentage = 0.45f
 
     fun createBlock(): Block {
         val totalHeight = viewport.height
