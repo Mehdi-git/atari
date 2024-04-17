@@ -3,6 +3,7 @@ package com.example.mygame.ui
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
@@ -89,7 +90,9 @@ fun Game(modifier: Modifier = Modifier) {
         Box(
             modifier
                 .fillMaxSize()
-                .clickable {
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() }, indication = null
+                ) {
                     playerLogic.jump()
                 }) {
 
