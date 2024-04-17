@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,9 @@ internal fun Player(
                     IntOffset(x = 0, y = player.value.y.dp.roundToPx())
                 }
                 .size(player.value.size.toDpSize())
+                .graphicsLayer {
+                    rotationZ = player.value.speed * 45
+                }
         )
     }
 }
