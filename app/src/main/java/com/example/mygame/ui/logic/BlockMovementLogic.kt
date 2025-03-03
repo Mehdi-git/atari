@@ -21,7 +21,7 @@ class BlockMovementLogic(
     override fun onUpdate(deltaTime: Float) {
 
         updateBlockX { x ->
-             x - (deltaTime * 0.2f).dp
+             x - (deltaTime * scrollAmount).dp
         }
 
     }

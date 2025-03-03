@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.mygame.R
 import com.example.mygame.ui.engine.TimeManager
 import com.example.mygame.ui.engine.toPx
+import com.example.mygame.ui.logic.BlockMovementLogic.Companion.scrollAmount
 import com.example.mygame.ui.resizeTo
 
 
@@ -32,7 +33,7 @@ internal fun Background(timeManager: TimeManager) {
         LaunchedEffect(key1 = Unit) {
            timeManager.deltaTime.collect{
                deltaTime ->
-               scrollX -= deltaTime * 0.1f
+               scrollX -= deltaTime * scrollAmount
            }
         }
 
